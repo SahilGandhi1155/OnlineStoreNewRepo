@@ -1,0 +1,526 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model OnlineStore.ViewModels.ProductListingViewModel
+@{
+    ViewBag.Title = "Find your Picks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    int pageSize = (int)ViewData["pageSize"];
+    int startIndex = (int?)ViewData["pageNumber"] ?? 1;
+    int currentPageNumber = ((int?)ViewData["pageNumber"] ?? 1) ;
+    startIndex = startIndex == 1 ? 1 : pageSize*(startIndex-1)+ 1;
+    int endIndex = startIndex + (int)ViewData["pageSize"]-1;
+    int TotalProducts = (int)ViewData["Count"];
+    endIndex = endIndex > TotalProducts ? TotalProducts : endIndex;
+}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<label>
+    subcatId is @ViewData["subcatId"]
+    catId is  @ViewData["catId"]
+    brandId is @ViewData["brandId"]
+</label>
+<style>
+    .shadow {
+        width: 100%;
+        float: left;
+        box-shadow: 0 0 10px #000;
+    }
+
+    .img-wrap-tailor a {
+        display: block
+    }
+
+    .img-wrap-tailor {
+        width: 100%;
+        float: left;
+        overflow: hidden;
+        height: 300px;
+        position: relative;
+    }
+
+        .img-wrap-tailor span {
+            position: absolute;
+            background: #ff6600;
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            text-align: center;
+            padding: 5px 0;
+            font-size: 19px;
+            color: #fff;
+        }
+
+    .box-customn {
+        width: 100%;
+        float: left;
+        border: 1px solid #ccc;
+        margin: 15px 0;
+        box-shadow: 0 0 5px #000;
+    }
+
+        .box-customn .imfo-area {
+            width: 100%;
+            float: left;
+            text-align: center;
+        }
+
+            .box-customn .imfo-area h3 {
+                margin: 0px;
+                padding: 0px;
+                color: #0c0c0c;
+                font-size: 21px;
+                line-height: 30px;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+
+            .box-customn .imfo-area p {
+                margin: 0px;
+                padding: 5px 0px;
+                font-size: 14px;
+            }
+
+            .box-customn .imfo-area h4 {
+                color: #ff0000;
+                font-weight: bold;
+                line-height: 30px;
+                font-size: 25px;
+            }
+
+    .img-wrap-tailor img {
+        max-width: 100%;
+    }
+
+    .box-customn a.onhover {
+        display: none;
+    }
+
+    .box-customn:hover a.onhover {
+        display: block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    .box-customn:hover a.nohover {
+        display: none;
+    }
+</style>
+<div class="container-fluid col-12">
+    <div class="row">
+
+        <div class=" col-md-2 m-0 bg-light">
+            <div class="row">
+                <div class="container" id="SortBy">
+                    <div class="form-group">
+
+                        <div id="SortByPriceForm">
+
+
+                            <div class="card">
+
+                                <div class="card-header fa fa-filter border-0" style="font-size :small" data-toggle="collapse" data-target="#SortByForm" aria-expanded="true" aria-controls="SortByForm">
+                                    <strong>Sort By</strong>
+                                </div>
+                                <div id="SortByForm" class="collapse">
+                                    <div class=" card-body mt-2 ml-2" style="overflow-y: auto; height:100px;">
+                                        <div id="SortByForm">
+                                            <ul style=" padding: 0; list-style-type: none;">
+
+                                                @for (int i = 0; i < Model.sorts.Count(); i++)
+                                                {
+                                                    if (ViewData["SortBy"] != null && Model.sorts[i].id == (int)ViewData["SortBy"])
+                                                    {
+                                                        <li>
+                                                            <a asp-controller="Home" asp-action="FilterByPrice"
+                                                               asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                                               asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                                               asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                                                               asp-route-sortBy="@Model.sorts[i].id" class="form-control-label" style="font-weight:bold">
+                                                                @Model.sorts[i].Name
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li>
+                                                            <a asp-controller="Home" asp-action="FilterByPrice"
+                                                               asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                                               asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                                               asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                                                               asp-route-sortBy="@Model.sorts[i].id" class="form-control-label">
+                                                                @Model.sorts[i].Name
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container" id="ClearAllFilters">
+                <div class="form-group">
+                    <div class="card">
+                        <div class="card-header fa fa-filter border-0" style="font-size :small">
+                            <a asp-controller="Home" asp-action="FilterByPrice" class="form-control-label">
+                                Clear All Filters
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container" id="filterbyPrice">
+                <div class="form-group">
+
+
+                    <div class="card">
+
+                        <div class="card-header fa fa-filter border-0" style="font-size :small" data-toggle="collapse" data-target="#FilterByPriceForm" aria-expanded="false" aria-controls="FilterByPriceForm">
+                            <strong> Filter By Price</strong>
+                        </div>
+                        @using (Html.BeginForm("FilterByPrice", "Home", FormMethod.Post))
+                        {
+
+                            <input type="hidden" value=@ViewData["catId"] name="catId" />
+                            <input type="hidden" value=@ViewData["subcatId"] name="subcatId" />
+                            <input type="hidden" value=@ViewData["brandId"] name="brandId" />
+                            <input type="hidden" value=@ViewData["searchValue"] name="searchValue" />
+                            <div id="FilterByPriceForm" class="collapse">
+                                <div class=" card-body mt-2 ml-2" style="overflow-y: auto; height:100px;">
+                                    <div id="FilterByPricecheckboxes">
+                                        <ul style=" padding: 0; list-style-type: none;">
+                                            @for (int i = 0; i < Model.price.Count(); i++)
+                                            {
+
+                                                <li>
+
+                                                    @if ((int?)ViewData["priceValue"] != null && (int?)ViewData["priceValue"] == Model.price[i].id)
+                                                    {
+                                                        <input type="radio" checked="checked" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="radio" />
+                                                    }
+                                                    @*<input name="FilterByPriceCheckbox" type="checkbox" asp-for="price[i].isSelected" />*@
+                                                    <a asp-controller="Home" asp-action="FilterByPrice"
+                                                       asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                                       asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                                       asp-route-priceValue="@Model.price[i].id" asp-route-discountValue="@ViewData["discountValue"]" class="form-control-label">
+                                                        @Model.price[i].Value
+                                                    </a>
+
+                                                    <br />
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center  ">
+                                    <div class="row">
+                                        <div id="PricecheckboxesResult">
+
+                                        </div>
+                                        <input type="submit" class="btn btn-outline-primary mt-0 mb-0 ml-3 pl-1 pr-1 border-0 float-right" value="Apply " />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+            <div class="container" id="filterbyDiscountPercent">
+                <div class="form-group">
+                    <form asp-controller="Home" asp-action="filterbyDiscountPercent" method="post">
+
+                        <div class="card">
+
+                            <div class="card-header fa fa-filter border-0" style="font-size :small" data-toggle="collapse" data-target="#filterbyDiscountPercentForm" aria-expanded="false" aria-controls="filterbyDiscountPercentForm">
+                                <strong>Filter By Discount Percentage </strong>
+                            </div>
+                            <div id="filterbyDiscountPercentForm" class="collapse">
+                                <div class=" card-body mt-2 ml-2" style="overflow-y: auto; height:100px;">
+                                    @for (int i = 0; i < Model.discountPercentage.Count(); i++)
+                                    {
+
+                                        @if ((int?)ViewData["discountValue"] != null && (int?)ViewData["discountValue"] == Model.discountPercentage[i].id)
+                                        {
+                                            <input type="checkbox" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" />
+                                        }
+                                        @*<input name="FilterByPriceCheckbox" type="checkbox" asp-for="price[i].isSelected" />*@
+                                        <a asp-controller="Home" asp-action="FilterByPrice"
+                                           asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                           asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                           asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@Model.discountPercentage[i].id"
+                                           class="form-control-label">
+                                            more than  @Model.discountPercentage[i].Value %
+                                        </a>
+
+                                        <br />
+                                    }
+                                </div>
+                                <div class="card-footer text-center  ">
+                                    <div class="row">
+                                        @if (Model.discountPercentage.Count(x => x.isSelected == true) > 0)
+                                        {
+                                            <input type="button" id="ClearAllButton" class="btn btn-outline-primary mt-0 mb-0 ml-1 pl-1 pr-1 border-0 float-left" value="Clear All " />
+                                        }
+                                        <input type="submit" class="btn btn-outline-primary mt-0 mb-0 ml-3 pl-1 pr-1 border-0 float-right" value="Apply " />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-10 m-0 bg-light">
+
+            @{ string searchValue = (ViewData["searchValue"] ?? string.Empty) as string;
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    <div class="font-weight-normal">
+                        Showing Results for "<b>@searchValue</b>"
+                    </div>
+                }
+
+            }
+
+
+
+            <div class="container mt-1">
+                Showing Products @startIndex - @endIndex from @TotalProducts
+                @{
+                    var partialmodel = new FilterProductListingViewModel();
+                    partialmodel.product = Model.product;
+                    await Html.RenderPartialAsync("ProductListingPartial", partialmodel);
+                }
+
+            </div>
+            <div class="container mt-1">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        @if (currentPageNumber != 1)
+                                {
+                                    int prevPageNumber = currentPageNumber - 1;
+
+                                <li class="page-item">
+                            <a class="page-link" tabindex="-1" asp-controller="Home" asp-action="FilterByPrice"
+                               asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                               asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                               asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                               asp-route-sortBy="@ViewData["SortBy"]" asp-route-pageIndex="@prevPageNumber"
+                               asp-route-PageSize="@ViewData["pageSize"]">Prev
+                                
+                            </a>
+                        </li>
+                        }
+
+
+                        @for (int i = 1;  (int)(TotalProducts / (i * pageSize)) >= 1; i++)
+                        {
+                            if ( i == currentPageNumber)
+                            {
+                                <li class="page-item active">
+                                    <a class="page-link" asp-controller="Home" asp-action="FilterByPrice"
+                                       asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                       asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                       asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                                       asp-route-sortBy="@ViewData["SortBy"]" asp-route-pageIndex="@i"
+                                       asp-route-PageSize="@ViewData["pageSize"]">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="Home" asp-action="FilterByPrice"
+                                       asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                       asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                       asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                                       asp-route-sortBy="@ViewData["SortBy"]" asp-route-pageIndex="@i"
+                                       asp-route-PageSize="@ViewData["pageSize"]">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (endIndex < TotalProducts)
+                        {
+                            int nextPageNumber = currentPageNumber + 1;
+                        <li class="page-item">
+                            <a class="page-link" asp-controller="Home" asp-action="FilterByPrice"
+                                       asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                       asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                       asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                                       asp-route-sortBy="@ViewData["SortBy"]" asp-route-pageIndex="@nextPageNumber"
+                                       asp-route-PageSize="@ViewData["pageSize"]">Next</a>
+                        </li>
+                        }
+                    </ul>
+                </nav>
+                </div>
+            </div>
+        </div>
+
+                <div class="shadow">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="box-customn">
+                            <div class="img-wrap-tailor">
+                                <a href="#" class="nohover"><img src="http://previews.123rf.com/images/ghoststone/ghoststone1506/ghoststone150600046/40752450-back-view-of-writing-beautiful-woman-Young-girl-in-dress-Rear-view-people-collection-backside-view-o-Stock-Photo.jpg" alt="fdsfsdf" /></a>
+                                <a href="#" class="onhover"><img src="http://www.rangitoto.school.nz/sites/rangitoto.school.nz/files/images/Snr%20boy%20shirt%20face%20right.jpg" alt="fdsfsdf" /></a>
+                                <span>Quick View</span>
+                            </div>
+                            <div class="imfo-area">
+                                <h3>My Cloth</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing</p>
+                                <h4>Rs. 11,250.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="box-customn">
+                            <div class="img-wrap-tailor">
+                                <a href="#" class="nohover"><img src="http://previews.123rf.com/images/ghoststone/ghoststone1506/ghoststone150600046/40752450-back-view-of-writing-beautiful-woman-Young-girl-in-dress-Rear-view-people-collection-backside-view-o-Stock-Photo.jpg" alt="fdsfsdf" /></a>
+                                <a href="#" class="onhover"><img src="http://www.rangitoto.school.nz/sites/rangitoto.school.nz/files/images/Snr%20boy%20shirt%20face%20right.jpg" alt="fdsfsdf" /></a>
+                                <span>Quick View</span>
+                            </div>
+                            <div class="imfo-area">
+                                <h3>My Cloth</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing</p>
+                                <h4>Rs. 11,250.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="box-customn">
+                            <div class="img-wrap-tailor">
+                                <a href="#" class="nohover"><img src="http://previews.123rf.com/images/ghoststone/ghoststone1506/ghoststone150600046/40752450-back-view-of-writing-beautiful-woman-Young-girl-in-dress-Rear-view-people-collection-backside-view-o-Stock-Photo.jpg" alt="fdsfsdf" /></a>
+                                <a href="#" class="onhover"><img src="http://www.rangitoto.school.nz/sites/rangitoto.school.nz/files/images/Snr%20boy%20shirt%20face%20right.jpg" alt="fdsfsdf" /></a>
+                                <span>Quick View</span>
+                            </div>
+                            <div class="imfo-area">
+                                <h3>My Cloth</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing</p>
+                                <h4>Rs. 11,250.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="box-customn">
+                            <div class="img-wrap-tailor">
+                                <a href="#" class="nohover"><img src="http://previews.123rf.com/images/ghoststone/ghoststone1506/ghoststone150600046/40752450-back-view-of-writing-beautiful-woman-Young-girl-in-dress-Rear-view-people-collection-backside-view-o-Stock-Photo.jpg" alt="fdsfsdf" /></a>
+                                <a href="#" class="onhover"><img src="http://www.rangitoto.school.nz/sites/rangitoto.school.nz/files/images/Snr%20boy%20shirt%20face%20right.jpg" alt="fdsfsdf" /></a>
+                                <span>Quick View</span>
+                            </div>
+                            <div class="imfo-area">
+                                <h3>My Cloth</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing</p>
+                                <h4>Rs. 11,250.00</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <script>
+                $(document).ready(function () {
+                    //$("#ClearAllButton").click(function () {
+                    //    $("#filterbyPrice").find("input[type='checkbox']").attr('checked', false);
+                    //    $("#ClearAllButton").attr("disabled", true);
+                    //});
+                    $('#FilterByPricecheckboxes input[type=checkbox]').click(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/Home/Index',
+                            success: function (result) {
+                                var s = '';
+                                for (var i = 0; i < result.length; i++) {
+                                    s += '<br>Id: ' + result[i].id;
+                                    s += '<br>Name: ' + result[i].name;
+                                    s += '<br>Price: ' + result[i].price;
+                                    s += '<br>------------------';
+                                }
+                                $('#result4').html(s);
+                            }
+                        });
+
+                    });
+
+
+            </script>
+
+            @*<div class="col-md-3 col-sm-4 col-xs-12 col-lg-3 " style="margin-bottom:8px">
+        <!--Card-->
+        <div class="card card-cascade card-ecommerce">
+
+            <!--Card image-->
+            <div class="view view-cascade overlay">
+                <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/belt.jpg"
+                     alt="" width="325" height="200" >
+                <a>
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+            <!--/.Card image-->
+            <!--Card content-->
+            <div class="card-body card-body-cascade text-center">
+                <!--Category & Title-->
+                <h5>Category</h5>
+                <h4 class="card-title"><strong><a href="">Product name</a></strong></h4>
+
+                <!--Description-->
+                <p class="card-text">
+                    Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe
+                    eveniet ut et voluptates.
+                </p>
+
+                <!--Card footer-->
+                <div class="card-footer">
+                    <span class="float-left">49$ <span class="discount">199$</span></span>
+                    <span class="float-right">
+                        <a class="" data-toggle="tooltip" data-placement="top" title="Add to Wishlist">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                    </span>
+                </div>
+
+            </div>
+            <!--/.Card content-->
+
+        </div>
+        <!--/.Card-->
+        </div>*@

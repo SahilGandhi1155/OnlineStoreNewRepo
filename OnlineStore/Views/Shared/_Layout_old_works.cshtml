@@ -1,0 +1,722 @@
+﻿@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@inject SignInManager<IdentityUser> signInManager;
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    @*<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />*@
+
+    <link href="~/Content/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Bootstrap-Dropdown/css/animate.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap-Dropdown/css/bootstrap-dropdownhover.css" rel="stylesheet" />
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/MyMainLayout.css" rel="stylesheet" type="text/css" />
+
+
+    <script src="~/jquery/jquery.js"></script>
+    <script src="~/jquery-validate/jquery.validate.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script>
+        $(document).ready(function () {
+            //$("#ClearAllButton").click(function () {
+            //    $("#filterbyPrice").find("input[type='checkbox']").attr('checked', false);
+            //    $("#ClearAllButton").attr("disabled", true);
+            //});
+
+            $('input[name="FilterByPriceCheckbox"]').click(function () {
+                alert("Firstfunction executed");
+                var result = $('input[name="FilterByPriceCheckbox"]');
+                if (result.length > 0)
+                {
+                    var resultString = result.length + " checkbox value changed<br/>";
+                    result.each(function () {
+                        var selectedValue = $(this).index();
+                        resultString += selectedValue + " - "
+                            + $('label[for="price_' + selectedValue + '__isSelected"]').text() + "<br/>";
+                    });
+                    alert(resultString);
+                    $('#PricecheckboxesResult').html(resultString);
+                }
+                else {
+                    $('#PricecheckboxesResult').html("No checkbox checked");
+                    getSelectedCheckBoxes('FilterByPriceCheckbox');
+                }
+                
+
+            function getSelectedCheckBoxes(groupName) { }
+
+     
+        });
+
+    </script>
+
+
+
+    <title>@ViewBag.Title</title>
+    <style>
+
+
+.gallery-wrap .img-big-wrap img {
+    height: 450px;
+    width: 450px;
+    /* width: auto;*/
+    display: inline-block;
+    cursor: zoom-in;
+    margin-left:20px;
+
+}
+
+
+.gallery-wrap .img-small-wrap .item-gallery {
+    width: 70px;
+    height: auto;
+    margin: 7px 2px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.gallery-wrap .img-small-wrap {
+    text-align: center;
+}
+
+    .gallery-wrap .img-small-wrap img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        border-radius: 4px;
+        /*cursor: zoom-in;*/
+    }
+
+.price-title {
+    font-weight: 700;
+}
+
+.price {
+    font-size: 24px;
+    line-height: 31px;
+    text-transform: uppercase;
+    max-height: 66px;
+    overflow: hidden;
+    font-family: 'Open Sans',Arial,sans-serif;
+    font-weight: 700;
+    width: 100%;
+    padding: 0;
+    float: none;
+}
+
+.color-price-waanbii {
+    color: #FA3A11;
+}
+
+.color-box-waanbii {
+    background: #FD6342;
+    color: white;
+}
+
+.fa-beat {
+    animation: fa-beat 5s ease infinite;
+}
+
+
+
+    </style>
+    
+</head>
+
+<body>
+    
+
+
+    <div class="container-fluid " style="background:#f7f7f7;color:#292b2c;">
+
+
+
+        <div class="row">
+
+            <div class="col-md-3 col-sm-3 col-xs-3">
+                <div class="logo">
+                    <h1 class="text-center"><a asp-controller="Home" asp-action="Index"><span style="color:black">Black &</span> <span style="color:blue"> Blue</span></a></h1>
+                    <p class="text-center">B&B Inc.</p>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-sm-5 col-xs-5">
+                <div style="margin-top:10px; margin-left:50px">
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+                    {
+
+                        <div class="olSearch fr">
+                            <input type="text" name="search" placeholder="Search Product/Category" class="inputComn form-control" />
+                            <div class="searchIcon">
+                                <button type="submit" class="searchBtn">
+                                    <img src="~/Images/searchIcon.png" />
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+
+            <nav class="navbar navbar-toggleable navbar-light  bg-faded">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#LoginRegisterNavbar " aria-controls="LoginRegisterNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse col-md-4 col-sm-4" id="LoginRegisterNavbar">
+                    <div class="LayoutTopbuttons">
+
+                        <ul class=" navbar-nav mr-auto ">
+
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                <li class=" nav-link">
+                                    <form method="post" asp-action="Logout" asp-controller="account">
+                                        <button type="submit" class="nav-item" style=" color:#292b2c">
+
+                                            Logout @User.Identity.Name
+                                        </button>
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="  nav-link">
+                                    <a class="nav-item" asp-controller="account" asp-action="register" style="color:#292b2c">Register</a>
+                                </li>
+                                <li class="  nav-link">
+
+                                    @{
+                                        var uriBuilder = new UriBuilder
+                                        {
+                                            Scheme = ViewContext.HttpContext.Request.Scheme,
+                                            Host = ViewContext.HttpContext.Request.Host.ToString(),
+                                            Path = ViewContext.HttpContext.Request.Path.ToString()
+                                        };
+
+                                        //Uri uri = uriBuilder.Uri;
+
+                                    }
+                                    <a class="nav-item" asp-controller="account" asp-action="Login" asp-route-returnurl="@uriBuilder">Login</a>
+                                </li>
+                            }
+
+                            <li class=" dropdown nav-link">
+                                <a class="nav-item dropdown-toggle" data-toggle="dropdown" href="#">Cart <i class="glyphicon glyphicon-shopping-cart">  </i> </a>
+                                <ul class=" dropdown-menu">
+
+                                    @{
+                                        var stringObject2 = HttpContextAccessor.HttpContext.Session.GetString("cart");
+
+                                        if (stringObject2 != null)
+                                        {
+
+                                            var cartList = JsonConvert.DeserializeObject<List<Item>>(stringObject2);
+                                            foreach (Item item in (List<Item>)cartList)
+                                            {
+                                                <li class="list-group-item " style="color:black">
+                                                    @item.Product.Name (@item.Quantity)  <a style="color:lightskyblue" asp-controller="Cart" asp-action="RemoveFromCart" asp-route-productId=@item.Product.Id>  <small>Remove</small> <i class="fa fa-times"></i></a>
+                                                </li>
+                                            }
+
+                                        }
+                                    }
+                                    <li class="divider"></li>
+                                    <li class=" nav-link">
+                                        <a class="nav-item" asp-controller="Home" asp-action="Checkout">Checkout</a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+
+
+
+                </div>
+            </nav>
+
+
+
+
+
+        </div>
+    </div>
+
+
+    @*<div class="row">
+            <div class="col-md-12">
+                <div class="nav-menus" id="navmenus" style="border-top: 2px solid #333;padding-top: 10px;padding-bottom: 20px;">
+                    <ul class="nav nav-pills">
+                        <li class="active">
+                            <a style="border-radius:initial; background: transparent;
+        color: #333;">Home</a>
+                        </li>
+                        <li class="active">
+                            <a style="border-radius:initial; background: transparent;
+        color: #333;">Location</a>
+                        </li>
+                        <li class="active">
+                            <a style="border-radius:initial; background: transparent;
+        color: #333;">About</a>
+                        </li>
+                        <li class="active">
+                            <a class="btn btn-dark pull-right" href="@Url.Action("Checkout", "Home")">Checkout</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>*@
+
+
+    <div class="container-fluid ">
+        <nav class="navbar navbar-toggleable navbar-light  bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav nav-fill w-100">
+
+                    <li class="nav-item active ">
+                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Mobiles & Accessories
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="height:500px;">
+                            <div class="container-fluid col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="null" class="dropdown-item"><b>Brand <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Mi</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">OnePlus</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Samsung</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Apple</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">POCO</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Huawei</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">OPPO</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Vivo</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Redmi</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">RealMe</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Asus</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">LG</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Lenovo</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Honor</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Infinix</a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" asp-route-brandId="2">Motorola</a>
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="2" class="dropdown-item"><b>Mobile Accessories <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="2" asp-route-subcatId="1">Mobile Cases</a>
+                                        <a class="dropdown-item" href="#">Selfie Sticks</a>
+                                        <a class="dropdown-item" href="#">Screen Guards</a>
+                                        <a class="dropdown-item" href="#">Power Banks</a>
+                                        <a class="dropdown-item" href="#">Headsets</a>
+                                        <a class="dropdown-item" href="#">Data Cables</a>
+                                        <a class="dropdown-item" href="#">Chargers</a>
+                                        <a class="dropdown-item" href="#">Mobile Holders</a>
+                                        <a class="dropdown-item" href="#">Skin Stickers</a>
+                                        <a class="dropdown-item" href="#">Memory Cards</a>
+                                        <a class="dropdown-item" href="#">HeadPhones</a>
+                                        <a class="dropdown-item" href="#">Speakers</a>
+                                        <a class="dropdown-item" href="#">Pendrives</a>
+                                        <a class="dropdown-item" href="#">Smart Watches </a>
+                                        <a class="dropdown-item" href="#">External Hard Disks</a>
+                                        <a class="dropdown-item" href="#">Lens Kits</a>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Accesories Brand <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" href="#">OnePlus</a>
+                                        <a class="dropdown-item" href="#">B&B SmartBuy</a>
+                                        <a class="dropdown-item" href="#">Intex</a>
+                                        <a class="dropdown-item" href="#">Ambrane</a>
+                                        <a class="dropdown-item" href="#">Syska</a>
+                                        <a class="dropdown-item" href="#">Mivi</a>
+                                        <a class="dropdown-item" href="#">Boat</a>
+                                        <a class="dropdown-item" href="#">Portronics</a>
+                                        <a class="dropdown-item" href="#">Apple</a>
+                                        <a class="dropdown-item" href="#">Samsung</a>
+                                        <a class="dropdown-item" href="#">Mi</a>
+                                        <a class="dropdown-item" href="#">JBL</a>
+                                        <a class="dropdown-item" href="#">Sandisk</a>
+                                        <a class="dropdown-item" href="#">Jabra </a>
+                                        <a class="dropdown-item" href="#">RealMe</a>
+                                        <a class="dropdown-item" href="#">Philips</a>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Featured Mobiles <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">OnePlus Nord</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">POCO X2</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Realme Narzo 10</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Iphone SE</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Vivo Y15s</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Samsung Galaxy M31</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">OPPO Reno 4</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Asus ROG Phone 3 </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Black Shark 3S</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">OPPO Reno 4 Pro</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">RealMe C15</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Samsung Galaxy M31s</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Infinix Smart 4 Plus </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">POCO M2 Pro</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Motorola One Fusion</a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item fontsmall"><b>Popular Accesories <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">boAt BassHeads 100</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">OnePlus Bullets </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Realme Buds 2</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">boAt Rockerz 255</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">JBL Glide 120</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">SanDisk 64GB </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">boAt AirDopes</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Mi 20000mAH </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Mi 10W Charger</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">SanDisk 32GB </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">SamSung C&T </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">boAt Rockerz 510</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Philips BT40</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">boAt DualPort Charger </a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">Mi 10000 mAH</a>
+                                        <a class="dropdown-item" style="font-size:12px" href="#">JBL Go Plus</a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobile Phones <i class="fa fa-caret-right"></i></b></a>
+                                        <a href="https://www.w3schools.com">
+                                            <img src="~/Images/MobilesMore.PNG" alt="Click Here To See More" width="180" height="400" />
+                                            <p style="color:black;text-align:center">See More</p>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item active ">
+                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Electronics
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="height:500px;">
+                            <div class="container-fluid col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Laptop Brands <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" href="#">Dell</a>
+                                        <a class="dropdown-item" href="#">Apple</a>
+                                        <a class="dropdown-item" href="#">Acer</a>
+                                        <a class="dropdown-item" href="#">Microsoft Surface</a>
+                                        <a class="dropdown-item" href="#">HP</a>
+                                        <a class="dropdown-item" href="#">Lenovo</a>
+                                        <a class="dropdown-item" href="#">Asus</a>
+                                        <a class="dropdown-item" href="#">Samsung</a>
+                                        <a class="dropdown-item" href="#">Sony Vaio</a>
+                                        <a class="dropdown-item" href="#">Toshiba</a>
+                                        <a class="dropdown-item" href="#">Xiaomi</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Tablets <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" href="#">Lenovo</a>
+                                        <a class="dropdown-item" href="#">Apple</a>
+                                        <a class="dropdown-item" href="#">Samsung</a>
+                                        <a class="dropdown-item" href="#">Xiaomi</a>
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Computer Accessories <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" href="#">Mouse</a>
+                                        <a class="dropdown-item" href="#">Keyboards</a>
+                                        <a class="dropdown-item" href="#">Chargers/Adapters</a>
+                                        <a class="dropdown-item" href="#">Lapdesks</a>
+                                        <a class="dropdown-item" href="#">Speakers</a>
+                                        <a class="dropdown-item" href="#">Printers</a>
+                                        <a class="dropdown-item" href="#">Cables</a>
+                                        <a class="dropdown-item" href="#">WebCams</a>
+                                        <a class="dropdown-item" href="#">HeadPhones</a>
+                                        <a class="dropdown-item" href="#">Surge Protectors</a>
+                                        <a class="dropdown-item" href="#">Laptop Bag & Sleeves</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Desktop PC Brands <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" href="#">Dell</a>
+                                        <a class="dropdown-item" href="#">Apple</a>
+                                        <a class="dropdown-item" href="#">Acer</a>
+                                        <a class="dropdown-item" href="#">HP</a>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Featured Laptops <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Mi Notebook 14</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Dell Inspiron 3595</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Lenovo Ideapad S145</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Microsoft Surface Laptop 3</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Asus Vivobook 15</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Dell Inspiron 5482</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Microsoft Surface Pro 7</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Lenovo Ideapad Gaming 3i </a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Acer Swift 3</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">HP Pavilion x360</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Apple Macbook Pro</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">HP 14Q</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Acer Aspire 7</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Apple Macbook Air </a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Lenovo Thinkpad E14</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Apple Macbook Core</a>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Popular Accessories <i class="fa fa-caret-right"></i></b></a>
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>HeadPhones <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">boAt BassHeads 900</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">JBL T250SI</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Microsoft Surface Laptop 3</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Sony 310AP</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="#" asp-action="">Philips TASH402BK</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mouse <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Logitech Bluetooth Mouse</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">HP X1000 Wired</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Lenovo 300 Wireless</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>KeyBoards <i class="fa fa-caret-right"></i></b></a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Dell KM 117</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">Logitech Mk 235</a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">HP 100 Wired </a>
+                                        <a class="dropdown-item" style="font-size:12px" asp-controller="" asp-action="">HP Omen Sequencer </a>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item fontsmall"><b>Popular Accesories <i class="fa fa-caret-right"></i></b></a>
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Speakers <i class="fa fa-caret-right"></i></b></a>
+                                        <br />
+                                        <a href="https://www.w3schools.com">
+                                            <img src="~/Images/SpeakersDropdown.PNG" alt="Click Here To See More" width="180" height="180" />
+                                            <p style="color:black;text-align:center">See More</p>
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Pendrives <i class="fa fa-caret-right"></i></b></a>
+                                        <br />
+                                        <a href="https://www.w3schools.com">
+                                            <img src="~/Images/PendriveDropdown.jpg" alt="Click Here To See More" width="130" height="100" />
+                                            <p style="color:black;text-align:center;margin-top:10px;">See More</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Laptops <i class="fa fa-caret-right"></i></b></a>
+                                        <a href="https://www.w3schools.com">
+                                            <img src="~/Images/LaptopDropdown.jpg" alt="Click Here To See More" width="180" height="300" />
+                                            <p style="color:black;text-align:center">See More</p>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Mobiles
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="container-fluid col-md-12" style="width:500px;height:500px;">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Featured</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Electronics
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="container-fluid col-md-12" style="width:1000px;height:400px;margin:0px;">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Featured</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Men
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="container-fluid col-md-12" style="width:1000px;height:400px;">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Featured</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Women
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="container-fluid col-md-12" style="width:1000px;height:400px;">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Mobiles</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a asp-action="FilterByPrice" asp-controller="Home" asp-route-catId="1" class="dropdown-item"><b>Featured</b></a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <a class="dropdown-item" href="#">RealMe 6i</a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    </div>
+
+
+
+
+    @*<div class="container-fluid col-md-12">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <a class="navbar-brand" asp-controller="home" asp-action="index">
+                    <img src="#" height="30" width="30" />
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+
+            </nav>
+
+        </div>*@
+
+
+    @RenderBody()
+
+    <hr />
+    <div>
+        <footer>
+            <div class="row">
+                <div class="col-md-12 copyright">
+
+                    <div class="col-md-6 col-sm-6 copyright-left">
+                        <p>&copy; @DateTime.Now.Year - OnlineShopingStore. All right reserved.</p>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 copyright-right">
+
+                        <ul class="list-unstyled list-social">
+                            <li><a href="#" target="_blank"><i class="fa fa-facebook-square"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        @if (IsSectionDefined("Scripts"))
+        {
+            @RenderSection("Scripts", required: true)
+        }
+    </div>
+
+
+
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="~/Content/bootstrap-4.0.0-alpha.6-dist/js/bootstrap.js"></script>
+<script src="~/Content/Bootstrap-Dropdown/js/bootstrap-dropdownhover.js"></script>
+
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ></script>*@
+@*<script src="~/twitter-bootstrap/js/bootstrap.min.js" type="text/javascript"></script>*@
+
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>*@

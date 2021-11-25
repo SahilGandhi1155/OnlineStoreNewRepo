@@ -1,0 +1,904 @@
+﻿@model HomeDetailsViewModel
+
+<!-- ========================= SECTION PAGETOP ========================= -->
+
+<div class="container-fluid">
+    <nav>
+        <ol class="breadcrumb text-white">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
+        </ol>
+    </nav>
+</div> <!-- container //  -->
+<!-- ========================= SECTION INTRO END// ========================= -->
+
+<div class="card">
+    <div class="row no-gutters">
+        <aside class="col-md-6">
+            <article class="gallery-wrap">
+                <div class="img-big-wrap">
+                    <div> <a href="#"><img src="~/Content/BootstrapEcommerce/Images/Details1.jpg"></a></div>
+                </div> <!-- slider-product.// -->
+                <div class="thumbs-wrap">
+                    <a href="#" class="item-thumb"> <img src="~/Content/BootstrapEcommerce/Images/Details1.jpg"></a>
+                    <a href="#" class="item-thumb"> <img src="~/Content/BootstrapEcommerce/Images/Details2.jpg"></a>
+                    <a href="#" class="item-thumb"> <img src="~/Content/BootstrapEcommerce/Images/Details3.jpg"></a>
+                </div> <!-- slider-nav.// -->
+            </article> <!-- gallery-wrap .end// -->
+        </aside>
+        <main class="col-md-6 border-left">
+            <article class="content-body">
+
+                <h2 class="title">@Model.Product.Name</h2>
+
+                <div class="rating-wrap my-3">
+                    Star Ratings
+                    <ul class="rating-stars">
+                        <li style="width:80%" class="stars-active">
+
+                            <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </li>
+                        <li>
+                            <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </li>
+                    </ul>
+                    <small class="label-rating text-muted">@Model.Product.Id reviews</small>
+                    <small class="label-rating text-success"> <i class="fa fa-clipboard-check"></i> @Model.Product.Id orders </small>
+                </div> <!-- rating-wrap.// -->
+
+                <div class="mb-3">
+                    <var class="price h4"><b>Rs. @Model.Product.DiscountPrice</b></var>
+                    <del class="price-old">Rs. @Model.Product.OriginalPrice</del>
+                </div> <!-- price-detail-wrap .// -->
+
+                <p>@Model.Product.Description</p>
+
+
+                <dl class="row">
+                    <dt class="col-sm-3">Model#</dt>
+                    <dd class="col-sm-9">@Model.Product.catId </dd>
+
+                    <dt class="col-sm-3">Color</dt>
+                    <dd class="col-sm-9">@Model.Product.subCatId</dd>
+
+                    <dt class="col-sm-3">Brand</dt>
+                    <dd class="col-sm-9">@Model.Product.brandId</dd>
+                </dl>
+
+                <hr>
+                <div class="form-row">
+                    <div class="form-group col-md flex-grow-0">
+                        <label>Quantity</label>
+                        <div class="input-group mb-3 input-spinner">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-light" type="button" id="button-plus"> + </button>
+                            </div>
+                            <input type="text" class="form-control" value="1">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" type="button" id="button-minus"> − </button>
+                            </div>
+                        </div>
+                    </div> <!-- col.// -->
+
+                </div> <!-- row.// -->
+
+                <a asp-controller="Cart" asp-action="BuyNowviaProductDetail" asp-route-productId="@Model.Product.Id"
+                   class="btn  btn-primary">Buy now</a>
+                <a asp-controller="Cart" asp-action="AddToCartviaProductDetail" asp-route-productId="@Model.Product.Id"
+                   class="btn  btn-primary"><span class="text">Add to cart</span><i class="fas fa-shopping-cart"></i></a>
+            </article> <!-- product-info-aside .// -->
+        </main> <!-- col.// -->
+    </div> <!-- row.// -->
+</div> <!-- card.// -->
+
+
+
+
+<div class="jumbotron-fluid">
+    <br>
+    <div class="card border-0">
+        <div class="row">
+            <aside class="col-sm-4">
+                <article class="gallery-wrap">
+                    <div class="img-big-wrap">
+                        <div> <a href="#"><img src="~/Images/@Model.Product.Image"></a></div>
+                    </div>
+                    <div class="img-small-wrap">
+                        <div class="item-gallery"> <img src="~/Images/@Model.Product.Image"> </div>
+                        <div class="item-gallery"> <img src="~/Images/@Model.Product.Image"> </div>
+                        <div class="item-gallery"> <img src="~/Images/@Model.Product.Image"> </div>
+                        <div class="item-gallery"> <img src="~/Images/@Model.Product.Image"> </div>
+                    </div>
+                </article>
+            </aside>
+            <aside class="col-sm-5">
+                <article class="card-body m-0 pt-0 pl-5">
+                    <h3 class="title text-uppercase">Nom du produit</h3>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="review-no ml-2">(41 avis)</span>
+                        </div>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <span class="h7 text-success">In stock.</span>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <span class="price-title">Special Price :</span>
+                        <span class="price color-price-waanbii">₹ @Model.Product.DiscountPrice</span>
+                    </div>
+                    <dl class="item-property">
+                        <dt>Description</dt>
+                        <dd>
+                            <p>
+                                Here goes description consectetur adipisicing elit, sed do eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                quis nostrud exercitation ullamco
+                            </p>
+                        </dd>
+                    </dl>
+                    <dl class="param param-feature">
+                        <dt>Poids</dt>
+                        <dd>200g</dd>
+                    </dl>
+                </article>
+            </aside>
+            <aside class="col-sm-3">
+                <div class="row">
+                    <dl class="param param-inline">
+                        <dt>Quantity: </dt>
+                        <dd>
+                            <select class="form-control form-control-sm" style="width:70px;">
+                                <option> 1 </option>
+                                <option> 2 </option>
+                                <option> 3 </option>
+                                <option> 4 </option>
+                                <option> 5 </option>
+                                <option> 6 </option>
+                                <option> 7 </option>
+                                <option> 8 </option>
+                                <option> 9 </option>
+                                <option> 10 </option>
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="row ">
+                    <button class="btn btn-lg color-box-waanbii" type="button"> <i class="fa fa-shopping-cart"></i> Ajouter au panier </button>
+                </div>
+                <div class="row mb-4 mt-4">
+                    <button class="btn btn-lg color-box-waanbii" type="button"> <i class="fa fa-credit-card"></i> Passer la commande </button>
+                </div>
+                <div class="row mb-4 mt-4">
+                    <button class="btn btn-lg btn-success" type="button"><i class="fa fa-heart fa-beat"></i></button>
+                </div>
+                <hr class="m-0 p-0">
+                <div class="row mb-4 mt-4">
+                    Il reste 3 exemplaires du produits.
+                </div>
+            </aside>
+        </div>
+    </div>
+
+</div>
+
+
+<head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<!------ Include the above in your HEAD tag ---------->
+<style>
+
+    .col-item {
+        border: 1px solid #E1E1E1;
+        border-radius: 5px;
+        background: #FFF;
+    }
+
+        .col-item .photo img {
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .col-item .info {
+            padding: 10px;
+            border-radius: 0 0 5px 5px;
+            margin-top: 1px;
+        }
+
+        .col-item:hover .info {
+            background-color: #F5F5DC;
+        }
+
+        .col-item .price {
+            /*width: 50%;*/
+            float: left;
+            margin-top: 5px;
+        }
+
+            .col-item .price h5 {
+                line-height: 20px;
+                margin: 0;
+            }
+
+    .price-text-color {
+        color: #219FD1;
+    }
+
+    .col-item .info .rating {
+        color: #777;
+    }
+
+    .col-item .rating {
+        /*width: 50%;*/
+        float: left;
+        font-size: 17px;
+        text-align: right;
+        line-height: 52px;
+        margin-bottom: 10px;
+        height: 52px;
+    }
+
+    .col-item .separator {
+        border-top: 1px solid #E1E1E1;
+    }
+
+    .clear-left {
+        clear: left;
+    }
+
+    .col-item .separator p {
+        line-height: 20px;
+        margin-bottom: 0;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+        .col-item .separator p i {
+            margin-right: 5px;
+        }
+
+    .col-item .btn-add {
+        width: 50%;
+        float: left;
+    }
+
+    .col-item .btn-add {
+        border-right: 1px solid #E1E1E1;
+    }
+
+    .col-item .btn-details {
+        width: 50%;
+        float: left;
+        padding-left: 10px;
+    }
+
+    .controls {
+        margin-top: 20px;
+    }
+
+    [data-slide="prev"] {
+        margin-right: 10px;
+    }
+</style>
+<div class="container-fluid ml-5 mr-5">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-9 bg-primary">
+                <h3>
+                    Carousel Product Cart Slider
+                </h3>
+            </div>
+            <div class="col-md-3 bg-danger">
+                <!-- Controls -->
+                <div class="controls pull-right hidden-xs">
+                    <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example"
+                       data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example"
+                                                data-slide="next"></a>
+                </div>
+            </div>
+        </div>
+        <div id="carousel-example" class="carousel slide hidden-xs" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Sample Product
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $199.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Product Example
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $249.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Next Sample Product
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $149.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Sample Product
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $199.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Product with Variants
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $199.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Grouped Product
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $249.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Product with Variants
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $149.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="col-item">
+                                <div class="photo">
+                                    <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                </div>
+                                <div class="info">
+                                    <div class="row">
+                                        <div class="price col-md-6">
+                                            <h5>
+                                                Product with Variants
+                                            </h5>
+                                            <h5 class="price-text-color">
+                                                $199.99
+                                            </h5>
+                                        </div>
+                                        <div class="rating hidden-sm col-md-6">
+                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="separator clear-left">
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                        </p>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="container-fluid col-12">
+    <div class="row">
+        <div class="col-md-4 ">
+            <img class="card-img-top" src="~/Images/@Model.Product.Image"
+                 runat="server" alt=@Model.Product.Name width="100" height="200" />
+        </div>
+        <div class="col-md-6 ">
+
+            <div class="card">
+                <div class="card-header">
+                    <h1>@Model.Product.Name</h1>
+                </div>
+
+                <div class="card-body text-center">
+
+
+                    <h4> @Model.Product.OriginalPrice</h4>
+                    <h4>@Model.Product.DiscountPercentage</h4>
+                    <h4>Current Price : @Model.Product.DiscountPrice</h4>
+
+
+                </div>
+                <div class="card-footer text-center">
+                    <label class="text-wrap">@Model.Product.Description</label>
+                    <a asp-controller="home" asp-action="Index" class="btn btn-primary">Back</a>
+                    <a href="/home/edit/@Model.Product.Id" class="btn btn-primary">Edit</a>
+                    <a href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            Others
+        </div>
+    </div>
+</div>
+
+<div class="super_container">
+    <header class="header" style="display: none;">
+        <div class="header_main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+                        <div class="header_search">
+                            <div class="header_search_content">
+                                <div class="header_search_form_container">
+                                    <form action="#" class="header_search_form clearfix">
+                                        <div class="custom_dropdown">
+                                            <div class="custom_dropdown_list">
+                                                <span class="custom_dropdown_placeholder clc">All Categories</span> <i class="fas fa-chevron-down"></i>
+                                                <ul class="custom_list clc">
+                                                    <li><a class="clc" href="#">All Categories</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="row" id="gradient">
+                    <div class="col-md-4">
+                        <img src="http://www.prepbootstrap.com/Content/images/shared/misc/s7e.png" class="img-responsive">
+                    </div>
+                    <div class="col-md-8" id="overview">
+                        <div class="row">
+                            <div class="col-xs-6 col-md-6">
+                                <ul class="pb-product-details-ul">
+                                    <li><span class="fa fa-calendar">&nbsp;Released 2016, March</span></li>
+                                    <li><span class="fa fa-phone">&nbsp;157g, 7.7mm thickness</span></li>
+                                    <li><span class="fa fa-bluetooth-b">&nbsp;Android OS, v6.0, up to 7.0</span></li>
+                                    <li><span class="fa fa-microchip">&nbsp;32/64/128GB Storage</span></li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-3 col-md-3 text-center" id="hits">
+                                <span class="fa fa-bar-chart">&nbsp;24%</span>
+                                <p>22,010,155 HITS</p>
+                            </div>
+                            <div class="col-xs-3 col-md-3 text-center" id="fan">
+                                <a href="#"><span class="fa fa-heart">&nbsp;1904</span></a>
+                                <p>BECOME A FAN</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 col-md-3 pb-product-details-fa">
+                                <span class="fa fa-mobile fa-lg"></span>
+                                <h3><strong>5.5"</strong></h3>
+                                <p>1440x2560 pixels</p>
+                            </div>
+                            <div class="col-xs-3 col-md-3 pb-product-details-fa">
+                                <span class="fa fa-camera fa-lg"></span>
+                                <h3><strong>12 MP</strong></h3>
+                                <p>2160p</p>
+                            </div>
+                            <div class="col-xs-3 col-md-3 pb-product-details-fa">
+                                <span class="fa fa-microchip fa-lg"></span>
+                                <h3><strong>4GB RAM</strong></h3>
+                                <p>Exynos 8890</p>
+                            </div>
+                            <div class="col-xs-3 col-md-3 pb-product-details-fa">
+                                <span class="fa fa-battery-4 fa-lg"></span>
+                                <h3><strong>3600mAH</strong></h3>
+                                <p>Li-ion</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="tabs_div">
+                        <ul>
+                            <li>Display</li>
+                            <li>Camera</li>
+                            <li>Hardware</li>
+                            <li>Battery</li>
+                            <li>Phone features</li>
+                        </ul>
+                        <div>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="success">Physical size: </td>
+                                        <td>5.5 inches</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Resolution: </td>
+                                        <td>1440x2560 pixels</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Pixel density: </td>
+                                        <td>534 dpi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Technology: </td>
+                                        <td>Super AMOLED</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Screen-to-body-ratio: </td>
+                                        <td>76.09%</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Features: </td>
+                                        <td>Scratch-resistant glass (Corning Gorilla Glass 4), Light sensor, Proximity sensor</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="success">Camera: </td>
+                                        <td>12 megapixels</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Flash: </td>
+                                        <td>LED</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Aperture size: </td>
+                                        <td>F1.7</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Camera sensor size: </td>
+                                        <td>1/2.5"</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Pixel size: </td>
+                                        <td>1.4 um</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Hardware Features: </td>
+                                        <td>Optical image stabilization, Autofocus (Phase detection)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="success">System chip: </td>
+                                        <td>Qualcomm Snapdragon 820 MSM8996</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Processor: </td>
+                                        <td>Quad-core, 2200 MHz, Kryo, 64-bit</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">GPU: </td>
+                                        <td>Adreno 530</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">System memory: </td>
+                                        <td>4GB memory</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Built-in storage: </td>
+                                        <td>32GB</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Storage Expansion: </td>
+                                        <td>microSD, microSDHC, microSDXC up to 200 GB</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="success">Capacity: </td>
+                                        <td>3600mah</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Type: </td>
+                                        <td>Not user replaceable, Li - Ion</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Wireless charging: </td>
+                                        <td>Optional</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="success">Sensors: </td>
+                                        <td>Accelerometer, Gyroscope, Compass, Hall, Barometer</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Notifications: </td>
+                                        <td>Haptic feedback, Music ringtones (MP3), Polyphonic ringtones, Vibration, Flight mode, Silent mode, Speakerphone</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">Other: </td>
+                                        <td>Voice dialing, Voice commands, Voice recording, TTY/TDD</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- you need to include the shieldui css and js assets in order for the charts to work -->
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-glow/all.min.css" />
+    <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $(".tabs_div").shieldTabs();
+        });
+    </script>
+
+    <style>
+        .pb-product-details-ul {
+            list-style-type: none;
+            padding-left: 0;
+            color: black;
+        }
+
+            .pb-product-details-ul > li {
+                padding-bottom: 5px;
+                font-size: 15px;
+            }
+
+        #gradient {
+            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#feffff+0,ddf1f9+31,a0d8ef+62 */
+            background: #feffff; /* Old browsers */
+            background: -moz-linear-gradient(left, #feffff 0%, #ddf1f9 31%, #a0d8ef 62%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(left, #feffff 0%,#ddf1f9 31%,#a0d8ef 62%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to right, #feffff 0%,#ddf1f9 31%,#a0d8ef 62%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#a0d8ef',GradientType=1 ); /* IE6-9 */
+            border: 1px solid #f2f2f2;
+            padding: 20px;
+        }
+
+        #hits {
+            border-right: 1px solid white;
+            border-left: 1px solid white;
+            vertical-align: middle;
+            padding-top: 15px;
+            font-size: 17px;
+            color: white;
+        }
+
+        #fan {
+            vertical-align: middle;
+            padding-top: 15px;
+            font-size: 17px;
+            color: white;
+        }
+
+        .pb-product-details-fa > span {
+            padding-top: 20px;
+        }
+    </style>
+

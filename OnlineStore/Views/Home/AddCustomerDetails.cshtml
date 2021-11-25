@@ -1,0 +1,52 @@
+﻿@model CustomerDetail
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Title = "Add/modify Your Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delivery Receiver Details</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="customerName">Name </label>
+                <input asp-for="customerName" class="form-control" />
+                <span asp-validation-for="customerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customerEmail">Email Address</label>
+                <input asp-for="customerEmail" class="form-control" />
+                <span asp-validation-for="customerEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customerContactNumber"> Contact Number </label>
+                <input asp-for="customerContactNumber" class="form-control" />
+                <span asp-validation-for="customerContactNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customerAddress1"> Delivery Address 1 </label>
+                <textarea asp-for="customerAddress1" translate="" class="form-control"></textarea>
+                <span asp-validation-for="customerAddress1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customerAddress2"> Delivery Address 2</label>
+                <textarea asp-for="customerAddress2" class="form-control"></textarea>
+                <span asp-validation-for="customerAddress2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customerPincode">Pincode </label>
+                <input asp-for="customerPincode" class="form-control" />
+                <span asp-validation-for="customerPincode" class="text-danger"></span>
+            </div>
+            @{
+                var cost = JsonConvert.DeserializeObject<int>(HttpContextAccessor.HttpContext.Session.GetString("SessionTotal"));
+            }
+            <button type="submit" class="btn btn-primary btn-success">Pay @cost to Complete</button>
+        </form>
+    </div>
+</div>

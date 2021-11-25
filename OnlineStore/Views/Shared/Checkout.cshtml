@@ -1,0 +1,64 @@
+﻿
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Checkout</h2>
+@{ 
+    var stringObject = HttpContextAccessor.HttpContext.Session.GetString("cart");
+    if (stringObject == null)
+        {
+    <div class="alert alert-danger">
+        <strong>No product added to cart!</strong>
+    </div>
+
+    }
+    else
+    {
+        var cartList = JsonConvert.DeserializeObject<List<Item>>(stringObject);
+        cartList.OrderBy(m => m.Product.DiscountPrice);
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Add</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @foreach (Item item in (List<Item>)cartList)
+            {
+                
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>
+                        <a href="@Url.Action("AddToCart", "Cart", new { productId = item.Product.Id ,url="Checkout"})">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        <a href="@Url.Action("DecreaseQty", "Cart", new { productId = item.Product.Id })">
+                            <i class="fa fa-minus"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("RemoveFromCart", "Cart", new { productId = item.Product.Id })">Remove <i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <a class="btn btn-success" href="@Url.Action("CheckoutDetails", "Home")">Checkout >></a>
+
+        }
+    }
+
+
+

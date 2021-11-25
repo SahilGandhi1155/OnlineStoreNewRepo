@@ -1,0 +1,59 @@
+﻿
+@model FilterProductListingViewModel
+
+<div class="card-group">
+    <div class="row">
+        @foreach (var product in Model.product)
+        {
+            <div class="col-md-3 col-sm-4 col-xs-12 col-lg-3 " style="margin-bottom:8px">
+                <div class="card  text-center " style="width:100%">
+                    @*<div class="card-header">
+                            <strong>   @product.Name </strong>
+                        </div>*@
+
+
+                    <img class="card-img-top align-self-center" src="~/Images/@product.Image"
+                         runat="server" alt=@product.Description width="200" height="200" />
+                    <br />
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @product.Name
+                        </h5>
+                        <a asp-controller="home" asp-action="details" asp-route-id="@product.Id"
+                           class="btn btn-dark ">More Details</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <ul class="list-inline ">
+                                <li class="list-inline-item"> <s>Rs. @product.OriginalPrice</s></li>
+                                <li class="list-inline-item "><b>Rs. @product.DiscountPrice</b> </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                    <div class="card-footer align-content-center bg-transparent border-dark">
+                        <div class="row">
+
+                            <a asp-controller="home" asp-action="details" asp-route-id="@product.Id" class="btn btn-primary float-left bg-success ml-2"><span class="fa fa-heart"> </span> <span class="fa fa-plus"> </span> </a>
+
+
+                         
+                                <a asp-controller="Cart" asp-action="AddToCart" 
+                                   asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                                  asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                                  asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                                   asp-route-sortBy="@ViewData["sortBy"]" asp-route-productId="@product.Id" 
+                        class="btn btn-primary pull-right ml-2">Add to Cart <i class="fa fa-shopping-cart"></i></a>
+
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+    </div>
+
+</div>

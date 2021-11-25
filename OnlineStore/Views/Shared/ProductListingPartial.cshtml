@@ -1,0 +1,38 @@
+﻿
+@model FilterProductListingViewModel
+
+
+    <div class="row">
+        @foreach (var product in Model.product)
+        {
+            <div class="col-md-4 ">
+                <figure class="card card-product-grid">
+                    <div class="img-wrap">
+                        <span class="badge badge-danger"> NEW </span>
+                        <img src="~/Images/@product.Image"
+                             runat="server" alt=@product.Description>
+                        <a class="btn-overlay" asp-controller="home" asp-action="details" asp-route-id="@product.Id"><i class="fa fa-search-plus"></i> More Details</a>
+                    </div> <!-- img-wrap.// -->
+                    <figcaption class="info-wrap">
+                        <div class="fix-height">
+                            <a asp-controller="home" asp-action="details" asp-route-id="@product.Id" class="title">@product.Name</a>
+                            <div class="price-wrap mt-2">
+                                <span class="price">Rs. @product.DiscountPrice</span>
+                                <del class="price-old">Rs. @product.OriginalPrice</del>
+                            </div> <!-- price-wrap.// -->
+                        </div>
+                        <a asp-controller="Cart" asp-action="AddToCart"
+                           asp-route-catId="@ViewData["catId"]" asp-route-subcatId="@ViewData["subcatId"]"
+                           asp-route-brandId="@ViewData["brandId"]" asp-route-searchValue="@ViewData["searchValue"] "
+                           asp-route-priceValue="@ViewData["priceValue"]" asp-route-discountValue="@ViewData["discountValue"]"
+                           asp-route-sortBy="@ViewData["sortBy"]" asp-route-productId="@product.Id" asp-route-pageIndex="@ViewData["pageNumber"]"
+                               asp-route-PageSize="@ViewData["pageSize"]"
+                           class="btn btn-block btn-primary">Add to cart</a>
+                    </figcaption>
+                </figure>
+            </div> <!-- col.// -->
+        }
+
+    </div> <!-- row end.// -->
+
+
